@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Stream - VC TECH</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .grid-select-container {
+            margin-bottom: 20px;
+        }
+        .grid-select {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .video-container {
+            display: grid;
+            grid-gap: 10px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .video-container.grid-2x2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        .video-container.grid-4x2 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .video-container.grid-4x4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+        .video-container.grid-8x4 {
+            grid-template-columns: repeat(8, 1fr);
+        }
+        .video-container > div {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            background-color: #000;
+        }
+        .video-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #666;
+        }
+        .indicator.online {
+            color: #4CAF50;
+        }
+        .fullscreen-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .fullscreen-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+        #closeFullscreen {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: #f44336;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Live Stream Dashboard - Page 2</h1>
+        <div class="grid-select-container">
+            <label for="gridSelect" class="grid-select">Select Grid Layout:</label>
+            <select id="gridSelect" class="grid-select">
+                <option value="2x2">2x2 (4 views)</option>
+                <option value="4x2">4x2 (8 views)</option>
+                <option value="4x4">4x4 (16 views)</option>
+                <option value="8x4">8x4 (32 views)</option>
+            </select>
+        </div>
+        <div class="video-container grid-2x2">
+            {% for stream_id in stream_ids %}
+            <div id="videoFeed{{ stream_id }}">
+                <img id="videoFeedImg{{ stream_id }}" src="{% url 'video_feed1' stream_id %}" alt="Live Stream {{ stream_id }}" />
+                <div class="button-container">
+                    <button class="button" data-stream-id="{{ stream_id }}">PAUSE STREAM {{ stream_id }}</button>
+                </div>
+                <div id="statusIndicator{{ stream_id }}" class="indicator"></div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="pagination-container">
+            {% if page_num > 1 %}
+            <a href="{% url 'live_stream_page' page_num=page_num|add:'-1' %}">Previous Page</a>
+            {% endif %}
+            {% if stream_ids|length >= 6 %}
+            <a href="{% url 'live_stream_page' page_num=page_num|add:'1' %}">Next Page</a>
+            {% endif %}
+        </div>
+    </div>
+    <div id="fullscreenContainer" class="fullscreen-container">
+        <img id="fullscreenImage" src="" alt="Fullscreen Image">
+        <button id="closeFullscreen">CLOSE</button>
+    </div>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+    const gridSelect = document.getElementById('gridSelect');
+    const videoContainer = document.querySelector('.video-container');
+
+    gridSelect.addEventListener('change', function() {
+        videoContainer.className = 'video-container'; // Reset class
+        videoContainer.classList.add(`grid-${this.value}`); // Add new class based on selection
+    });
+
+    const buttons = document.querySelectorAll('.button');
+    const videoFeeds = document.querySelectorAll('.video-container img');
+    const fullscreenContainer = document.getElementById('fullscreenContainer');
+    const fullscreenImage = document.getElementById('fullscreenImage');
+    const closeFullscreenButton = document.getElementById('closeFullscreen');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', async function() {
+            const streamId = this.getAttribute('data-stream-id');
+            const currentAction = this.textContent.includes('PAUSE') ? 'pause' : 'play';
+            try {
+                const response = await fetch(`/control_stream/${streamId}/${currentAction}/`);
+                const data = await response.json();
+                if (data.status === 'success') {
+                    this.textContent = currentAction === 'pause' ? 'PLAY STREAM ' + streamId : 'PAUSE STREAM ' + streamId;
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Failed to send control command:', error);
+                alert('Failed to send control command: ' + error.message);
+            }
+        });
+    });
+
+    videoFeeds.forEach(feed => {
+        feed.addEventListener('click', function() {
+            fullscreenImage.src = this.src;
+            fullscreenContainer.style.display = 'flex';
+        });
+    });
+
+    closeFullscreenButton.addEventListener('click', function() {
+        fullscreenContainer.style.display = 'none';
+    });
+});
+</script>
+
+</body>
+</html>

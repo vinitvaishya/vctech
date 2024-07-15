@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resolved Alerts</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #004AAD; /* Changed background color */
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold; /* Making the heading bold */
+            padding: 10px; /* Adding padding to the heading */
+        }
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .back-button {
+            background-color: rgb(218, 19, 19);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #003b8a;
+        }
+        .alerts-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .alert {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: calc(25% - 20px);  /* Adjusting the width to fit 4 items in a row */
+            flex-grow: 1;  /* Ensures that alerts use available space */
+            transition: transform 0.3s;
+        }
+        .alert:hover {
+            transform: translateY(-10px); /* Adding a hover effect */
+        }
+        .alert p {
+            margin: 5px 0;
+        }
+        @media (max-width: 1024px) {
+            .alert {
+                width: calc(50% - 20px); /* Two alerts per row on tablets */
+            }
+        }
+        @media (max-width: 768px) {
+            .alert {
+                width: calc(50% - 20px); /* Two alerts per row on large phones */
+            }
+        }
+        @media (max-width: 480px) {
+            .alert {
+                width: 100%; /* One alert per row on small phones */
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Resolved Alerts</h1>
+    <div class="header">
+        <a href="{% url 'display_alerts' %}" class="back-button">Back to Alerts</a>
+    </div>
+    <div class="alerts-grid">
+        {% for alert in alerts %}
+            <div class="alert">
+                <p><strong>Type:</strong> {{ alert.alert_type }}</p>
+                <p><strong>Message:</strong> {{ alert.message }}</p>
+                <p><strong>Date:</strong> {{ alert.created_at|date:"N d, Y H:i" }}</p>
+                <p><strong>Source:</strong> {{ alert.source }}</p> <!-- Displaying the source -->
+                <p><strong>Resolved At:</strong> {{ alert.resolved_at|date:"N d, Y H:i" }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

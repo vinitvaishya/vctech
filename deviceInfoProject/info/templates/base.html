@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="65">
+    <title>VC TECHNOSOLUTIONS</title>
+    {% load static %}
+    <link rel="icon" href="{% static 'info/sitelogo.png' %}" type="image/x-icon">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Roboto', sans-serif;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .navbar, .sidebar, .card-header, .btn-primary {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .navbar {
+            background: #004aad;
+        }
+        .navbar-dark .navbar-brand, .navbar-dark .navbar-nav .nav-link {
+            color: white !important;
+        }
+        .sidebar {
+            height: 100vh;
+            background:  #004aad;
+            color: white;
+            padding-top: 20px;
+        }
+        .sidebar .nav-link {
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .sidebar .nav-link i {
+            margin-right: 10px;
+        }
+        .sidebar .nav-link:hover {
+            background-color:  #004aad;
+        }
+        .sidebar .nav-link.active {
+            background-color:  #004aad;
+        }
+        .card {
+            margin-bottom: 20px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background: linear-gradient(90deg, #004aad 0%,  #004aad 100%);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+        }
+        .btn-primary {
+            background-color: #004aad;
+            border: none;
+            border-radius: 20px;
+        }
+        .btn-primary:hover {
+            background-color:  #004aad;
+        }
+        .header-stats .card {
+            text-align: center;
+        }
+        .header-stats .card .card-body {
+            font-size: 1.5em;
+        }
+        .header-stats .card .card-body .small {
+            font-size: 0.6em;
+        }
+        .chart-container {
+            height: 300px;
+        }
+        .camera-header {
+            font-size: 2em;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                height: auto;
+            }
+            .sidebar .nav-link {
+                text-align: center;
+                padding: 10px;
+            }
+            .container-fluid {
+                padding: 0;
+            }
+            .sidebar {
+                padding: 10px 0;
+            }
+            .sidebar .nav-link {
+                margin: 5px 0;
+            }
+        }
+        .dark-mode {
+            background-color: #343a40 !important;
+            color: white !important;
+        }
+        .dark-mode .navbar, .dark-mode .sidebar, .dark-mode .card-header, .dark-mode .btn-primary {
+            background: linear-gradient(90deg, rgba(56,0,123,1) 0%, rgba(91,27,190,1) 100%);
+        }
+        .dark-mode .navbar-dark .navbar-brand, .dark-mode .navbar-dark .navbar-nav .nav-link {
+            color: white !important;
+        }
+        .dark-mode .sidebar .nav-link {
+            color: white;
+        }
+        .dark-mode .sidebar .nav-link:hover {
+            background-color: rgba(21, 47, 221, 0.8);
+        }
+        .dark-mode .sidebar .nav-link.active {
+            background-color: rgba(56,0,123,0.8);
+        }
+        .dark-mode .card {
+            background-color: #495057;
+            color: white;
+            box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1);
+        }
+        .dark-mode .card-header {
+            background: linear-gradient(90deg, rgba(56,0,123,1) 0%, rgba(91,27,190,1) 100%);
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <a href="#"><img src="{% static 'info/logo.png' %}" alt="VC Tech Logo" style="width: 150px; height: auto;"></a>
+
+    <a class="navbar-brand" href="#"> </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <!-- <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a> -->
+            </li>
+            <li class="nav-item">
+                <!-- <a class="nav-link" href="#"><i class="fas fa-user"></i> Profile</a> -->
+            </li>
+            <li class="nav-item">
+                <!-- <a class="nav-link" href="#"><i class="fas fa-cogs"></i> Settings</a> -->
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-primary" onclick="toggleDarkMode()"><i class="fas fa-moon"></i> Dark Mode</button>
+            </li>
+                <ul></ul>
+            <li class="nav-item">
+                <button class="btn btn-primary logout" onclick="window.location.href='/info/dashboard/'"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <nav class="col-md-2 d-none d-md-block sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <!-- Alerts Dropdown -->
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAlerts" role="button" data-toggle="collapse" data-target="#alertsSubmenu" aria-expanded="false" aria-controls="alertsSubmenu">
+                            <i class="fas fa-bell"></i> Alerts
+                        </a>
+                        <div class="collapse" id="alertsSubmenu">
+                            <ul class="nav flex-column ml-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/info/charts">
+                                        <i class="fas fa-chart-line"></i> Alerts Dashboard
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/alerts/table/">
+                                        <i class="fas fa-table"></i> Alerts Table
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- Health Monitoring Dropdown -->
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownHealthMonitoring" role="button" data-toggle="collapse" data-target="#healthMonitoringSubmenu" aria-expanded="false" aria-controls="healthMonitoringSubmenu">
+                            <i class="fas fa-heartbeat"></i> Health Monitoring
+                        </a>
+                        <div class="collapse" id="healthMonitoringSubmenu">
+                            <ul class="nav flex-column ml-3">
+                                <!-- Client 1 -->
+                                <li class="nav-item">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownClient1Health" role="button" data-toggle="collapse" data-target="#client1HealthNVR" aria-expanded="false" aria-controls="client1HealthNVR">
+                                        <i class="fas fa-map-marker-alt"></i> Untwadi
+                                    </a>
+                                    <div class="collapse" id="client1HealthNVR">
+                                        <ul class="nav flex-column ml-3">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/HM1/alert-dashboard/">
+                                                    <i class="fas fa-server"></i>NVR 1</a>
+                                            </li>
+                                            <!-- <li class="nav-item">
+                                                <a class="nav-link" href="/client1/health/nvr2/">NVR 2</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/client1/health/nvr3/">NVR 3</a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </li>
+                                <!-- Client 2 -->
+                                <li class="nav-item">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownClient2Health" role="button" data-toggle="collapse" data-target="#client2HealthNVR" aria-expanded="false" aria-controls="client2HealthNVR">
+                                        <i class="fas fa-map-marker-alt"></i> Hesaraghatta
+                                    </a>
+                                    <div class="collapse" id="client2HealthNVR">
+                                        <ul class="nav flex-column ml-3">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/HM2/alert-dashboard2/">
+                                                    <i class="fas fa-server"></i>NVR 1</a>
+                                            </li>
+                                            <!-- <li class="nav-item">
+                                                <a class="nav-link" href="/client2/health/nvr2/">NVR 2</a>
+                                            </li>
+                                            <li the nav-item>
+                                                <a class="nav-link" href="/client2/health/nvr3/">NVR 3</a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </li>
+                                <!-- Client 3 -->
+                                <!-- <li class="nav-item">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownClient3Health" role="button" data-toggle="collapse" data-target="#client3HealthNVR" aria-expanded="false" aria-controls="client3HealthNVR">
+                                        Client 3
+                                    </a>
+                                    <div class="collapse" id="client3HealthNVR">
+                                        <ul class="nav flex-column ml-3">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/client3/health/nvr1/">NVR 1</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/client3/health/nvr2/">NVR 2</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/client3/health/nvr3/">NVR 3</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li> -->
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- Live Monitoring Dropdown -->
+                    <li class="nav-item">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownLiveMonitoring" role="button" data-toggle="collapse" data-target="#liveMonitoringSubmenu" aria-expanded="false" aria-controls="liveMonitoringSubmenu">
+                            <i class="fas fa-video"></i> Live Monitoring
+                        </a>
+                        <div class="collapse" id="liveMonitoringSubmenu">
+                            <ul class="nav flex-column ml-3">
+                                <!-- Client 1 -->
+                                <li class="nav-item">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownClient1Live" role="button" data-toggle="collapse" data-target="#client1LiveNVR" aria-expanded="false" aria-controls="client1LiveNVR">
+                                        <i class="fas fa-map-marker-alt"></i> Untwadi
+                                    </a>
+                                    <div class="collapse" id="client1LiveNVR">
+                                        <ul class="nav flex-column ml-3">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/live1/live_stream/">
+                                                    <i class="fas fa-broadcast-tower"></i> LIVE 1</a>
+                                            </li>
+                                            <!-- <li class="nav-item">
+                                                <a class="nav-link" href="/client1/live/nvr2/">NVR 2</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/client1/live/nvr3/">NVR 3</a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </li>
+                                <!-- Client 2 -->
+                                <li class="nav-item">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownClient2Live" role="button" data-toggle="collapse" data-target="#client2LiveNVR" aria-expanded="false" aria-controls="client2LiveNVR">
+                                        <i class="fas fa-map-marker-alt"></i> Hesaraghatta
+                                    </a>
+                                    <div class="collapse" id="client2LiveNVR">
+                                        <ul class="nav flex-column ml-3">
+                                            <li the nav-item>
+                                                <a class="nav-link" href="/live2/live_stream">
+                                                    <i class="fas fa-broadcast-tower"></i> LIVE 1</a>
+                                            </li>
+                                            <!-- <li class="nav-item">
+                                                <a class="nav-link" href="/client2/live/nvr2/">NVR 2</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/client2/live/nvr3/">NVR 3</a>
+                                            </li> -->
+                                        </ul>
+                                    </div>
+                                </li>
+                                <!-- Client 3 -->
+                                <!-- <li the nav-item>
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownClient3Live" role="button" data-toggle="collapse" data-target="#client3LiveNVR" aria-expanded="false" aria-controls="client3LiveNVR">
+                                        Client 3
+                                    </a>
+                                    <div class="collapse" id="client3LiveNVR">
+                                        <ul class="nav flex-column ml-3">
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/client3/live/nvr1/">NVR 1</a>
+                                            </li>
+                                            <li the nav-item>
+                                                <a class="nav-link" href="/client3/live/nvr2/">NVR 2</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" href="/client3/live/nvr3/">NVR 3</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li> -->
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    <div class="col-md-10 ml-sm-auto col-lg-10 px-4">
+        {% block content %}
+        
+<script>
+    // Function to toggle dark mode
+    function toggleDarkMode() {
+        var body = document.body;
+        body.classList.toggle('dark-mode');
+        var icon = body.classList.contains('dark-mode') ? 'fas fa-sun' : 'fas fa-moon';
+        var text = body.classList.contains('dark-mode') ? ' Light Mode' : ' Dark Mode';
+        var button = document.getElementById('dark-mode-toggle');
+        button.innerHTML = `<i class="${icon}"></i>${text}`;
+    }
+    // Attach event listener to dark mode button
+    document.getElementById('dark-mode-toggle').addEventListener('click', toggleDarkMode);
+    </script>
+    </body>
+</html>
+{% endblock %}
