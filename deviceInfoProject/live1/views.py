@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 cameras = {}
 
 class VideoCamera:
-    def __init__(self, source):
+    def _init_(self, source):
         self.source = source
         self.is_running = True
         self.lock = Lock()
@@ -25,7 +25,7 @@ class VideoCamera:
             raise Exception(f"Failed to open video source: {source}")
         logger.debug(f"Camera initialized with source: {source}")
 
-    def __del__(self):
+    def _del_(self):
         self.stop()
 
     def stop(self):
@@ -75,8 +75,6 @@ def video_feed(request, stream_id):
         "10": "rtsp://admin:vct280620@10.11.12.122:1024/Streaming/Channels/1001",
         "11": "rtsp://admin:vct280620@10.11.12.122:1024/Streaming/Channels/1101",
         "12": "rtsp://admin:vct280620@10.11.12.122:1024/Streaming/Channels/1201",
-        "13": "rtsp://admin:vct280620@10.11.12.122:1024/Streaming/Channels/1301",
-        "14": "rtsp://admin:vct280620@10.11.12.122:1024/Streaming/Channels/1401",
         # Add more stream links as needed
     }
     source = stream_map.get(str(stream_id))
@@ -115,42 +113,5 @@ def control_stream(request, stream_id, action):
 
     return JsonResponse({'status': 'success', 'action': action, 'stream_id': stream_id})
 
-from django.shortcuts import render
-from django.http import Http404
-
-def live_stream_page(request, page_num):
-    # Define the streams per page
-    streams_per_page = 6
-    # Calculate the start and end indices for streams on the current page
-    start_idx = (page_num - 1) * streams_per_page
-    end_idx = page_num * streams_per_page
-    # Total number of streams available
-    total_streams = 14
-    
-    # Ensure page_num is a positive integer
-    if page_num < 1:
-        raise Http404("Page not found")
-
-    # Calculate the list of stream IDs for the current page
-    stream_ids = list(range(1, total_streams + 1))[start_idx:end_idx]
-    
-    # If no streams are found for the current page, raise a 404 error
-    if not stream_ids:
-        raise Http404("Page not found")
-
-    context = {
-        'stream_ids': stream_ids,
-        'page_num': page_num,
-    }
-    
-    # Choose the template based on the page number
-    if page_num == 1:
-        template_name = 'live_stream_page1.html'
-    elif page_num == 2:
-        template_name = 'live_stream_page2.html'
-    else:
-        template_name = 'live_stream_page3.html'
-        
-    return render(request, f'live1/{template_name}', context)
-
-
+def live_stream1(request):
+    return render(request, 'live1/live_stream1.html')

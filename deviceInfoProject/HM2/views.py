@@ -14,7 +14,7 @@ def alert_dashboard2(request):
     
     urls = {
         'device': 'http://10.11.12.93:81/ISAPI/System/deviceInfo?format=xml',
-        'storage': 'http://10.11.12.93:81/ISAPI/ContentMgmt/Storage/hdd/capabilities?format=xml',
+        'storage':'http://10.11.12.93:81/ISAPI/ContentMgmt/Storage/hdd/capabilities?format=xml',
         'status': 'http://10.11.12.93:81/ISAPI/System/status?format=xml',
         'camera': 'http://10.11.12.93:81/ISAPI/ContentMgmt/InputProxy/channels?'
     }

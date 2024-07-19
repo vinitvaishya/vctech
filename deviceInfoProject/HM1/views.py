@@ -10,11 +10,11 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def alert_dashboard(request):
-    auth = HTTPDigestAuth('admin', 'vct280620')
+    auth = HTTPDigestAuth('vctech', 'Vctech@1234')
     
     urls = {
         'device': 'http://10.11.12.122:81/ISAPI/System/deviceInfo?format=xml',
-        'storage': 'http://10.11.12.122:81/ISAPI/ContentMgmt/Storage/hdd/capabilities?format=xml',
+       'storage': 'http://10.11.12.122:81/ISAPI/ContentMgmt/Storage/hdd/capabilities?format=xml',
         'status': 'http://10.11.12.122:81/ISAPI/System/status?format=xml',
         'camera': 'http://10.11.12.122:81/ISAPI/ContentMgmt/InputProxy/channels?'
     }
